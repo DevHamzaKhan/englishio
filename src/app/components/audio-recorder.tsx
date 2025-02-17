@@ -1,4 +1,3 @@
-// src/components/audio-recorder.tsx
 'use client';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -6,22 +5,27 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Mic, Square, Trash2, BookOpenCheck } from 'lucide-react';
 
-declare global {
-    interface Window {
-      webkitSpeechRecognition?: typeof SpeechRecognition;
-    }
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: (event: SpeechRecognitionEvent) => void;
+  onerror: (event: Event) => void;
+  start: () => void;
+  stop: () => void;
+}
 
-    let SpeechRecognition: {
-      prototype: typeof SpeechRecognition;
-      new (): typeof SpeechRecognition;
-    };
+declare global {
+  interface Window {
+    webkitSpeechRecognition?: new () => SpeechRecognition;
+    SpeechRecognition?: new () => SpeechRecognition;
+  }
 }
 
 interface SpeechRecognitionEvent extends Event {
   results: SpeechRecognitionResultList;
   resultIndex: number;
 }
-
 
 export default function AudioRecorder() {
     const router = useRouter();
@@ -40,17 +44,20 @@ export default function AudioRecorder() {
     const analyserRef = useRef<AnalyserNode | null>(null);
     const dataArrayRef = useRef<Uint8Array | null>(null);
   
-    useEffect(() => {
-      const setupSpeechRecognition = () => {
-        // Fix TypeScript error by asserting window as unknown first
-        const SpeechRecognition =
-          (window as unknown as { SpeechRecognition?: typeof SpeechRecognition }).SpeechRecognition ||
-          window.webkitSpeechRecognition;
-
-      recognition.current = new SpeechRecognition();
-      recognition.current.continuous = true;
-      recognition.current.interimResults = true;
-      recognition.current.lang = 'en-US';
+      useEffect(() => {
+        const setupSpeechRecognition = () => {
+          const SpeechRecognition = 
+            window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+          if (!SpeechRecognition) {
+            setError('Speech recognition is not supported in your browser.');
+            return;
+          }
+    
+          recognition.current = new SpeechRecognition();
+          recognition.current.continuous = true;
+          recognition.current.interimResults = true;
+          recognition.current.lang = 'en-US';
 
       recognition.current.onresult = (event: SpeechRecognitionEvent) => {
         let final = '';
