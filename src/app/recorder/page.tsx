@@ -182,7 +182,7 @@ export default function Recorder() {
     <main className="min-h-screen flex flex-col justify-center items-center p-8">
       <Card className="w-full max-w-4xl">
         <CardHeader>
-          <CardTitle className="text-3xl font-bold text-center">IB English IO Grader</CardTitle>
+          <CardTitle className="text-4xl font-bold text-center">IB English IO Grader</CardTitle>
           <CardDescription className="text-center text-lg">
             Record your presentation and receive instant feedback
           </CardDescription>

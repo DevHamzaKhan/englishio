@@ -1,4 +1,3 @@
-// app/api/grade/route.ts
 import { generateObject } from 'ai';
 import { z } from 'zod';
 import { openai } from '@ai-sdk/openai';
@@ -96,6 +95,7 @@ Final total score out of 40
 
 Use UK English spelling and academic tone:
 `;
+
 const gradeSchema = z.object({
   criterionA: z.object({
     score: z.number().min(0).max(10),
@@ -154,6 +154,3 @@ export async function POST(req: Request) {
     });
   }
 }
-
-// Optional for Edge runtime (uncomment if needed):
-// export const runtime = 'edge';
