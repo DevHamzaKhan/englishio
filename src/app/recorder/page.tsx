@@ -33,7 +33,7 @@ export default function Recorder() {
   const router = useRouter()
 
   const [isRecording, setIsRecording] = useState(false)
-  const [finalTranscript, setFinalTranscript] = useState("")
+  const [finalTranscript, setFinalTranscript] = useState("Student:")
   const [interimTranscript, setInterimTranscript] = useState("")
   const [timeLeft, setTimeLeft] = useState(600)
   const [error, setError] = useState("")
@@ -127,9 +127,9 @@ export default function Recorder() {
     draw()
   }
 
-  const handleGrade = () => {
+  const handleQuestions = () => {
     sessionStorage.setItem("transcript", finalTranscript)
-    router.push("/grading")
+    router.push("/questions")
   }
 
   const startRecording = async () => {
@@ -164,7 +164,7 @@ export default function Recorder() {
   }
 
   const resetState = () => {
-    setFinalTranscript("")
+    setFinalTranscript("Student:")
     setInterimTranscript("")
     setError("")
     setTimeLeft(600)
@@ -254,9 +254,9 @@ export default function Recorder() {
             </Button>
 
             {!isRecording && finalTranscript && (
-              <Button onClick={handleGrade} variant="default" size="lg" className="w-40">
+              <Button onClick={handleQuestions} variant="default" size="lg" className="w-40">
                 <BookOpenCheck className="mr-2 h-5 w-5" />
-                Grade
+                Questions
               </Button>
             )}
           </div>
